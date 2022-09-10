@@ -89,7 +89,7 @@ public class DirectionController : MonoBehaviour
 
     IEnumerator ArriveGently(float minimumSpeed)
     {
-        for (float i = 0; i < 1; i += 0.1f)
+        for (float i = 0; i < 10; i++)
         {
             rb.velocity /= 1.3f;
 
@@ -99,6 +99,28 @@ public class DirectionController : MonoBehaviour
                 break;
             }
             
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+    
+    IEnumerator FadeArrow(bool fadeOut)
+    {
+        SpriteRenderer rend = arrow.GetComponent<SpriteRenderer>();
+        Color temp = rend.color;
+        
+        for (float i = 0; i < 10; i++)
+        {
+            if (fadeOut)
+            {
+                rend.color = new Color(temp.r, temp.g, temp.b, temp.a - 0.1f);
+            }
+            else
+            {
+                rend.color = new Color(temp.r, temp.g, temp.b, temp.a + 0.1f);
+            }
+
+            temp = rend.color;
+
             yield return new WaitForSeconds(0.1f);
         }
     }
@@ -116,6 +138,7 @@ public class DirectionController : MonoBehaviour
             rb.velocity = dir * forceSpeed;
             
             StartCoroutine(ArriveGently(3));
+            StartCoroutine(FadeArrow(true));
         }
     }
 
@@ -126,6 +149,8 @@ public class DirectionController : MonoBehaviour
             isRotating = true;
             isArriving = false;
             rb.velocity = Vector3.zero;
+            
+            StartCoroutine(FadeArrow(false));
         }
     }
 }

@@ -11,7 +11,7 @@
                     "id": "74bcc912-0620-477e-b55c-809b3b13c022",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2)",
                     "initialStateCheck": false
                 },
                 {
@@ -28,8 +28,8 @@
                 {
                     "name": "",
                     "id": "c023745b-94d5-43cb-aff8-1f2936f6ce28",
-                    "path": "<Keyboard>/space",
-                    "interactions": "Press(behavior=2)",
+                    "path": "<Keyboard>/anyKey",
+                    "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Short",
@@ -39,7 +39,7 @@
                 {
                     "name": "",
                     "id": "c362c78b-199e-4dd7-bd78-f6f42c1ce242",
-                    "path": "<Keyboard>/space",
+                    "path": "<Keyboard>/anyKey",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
