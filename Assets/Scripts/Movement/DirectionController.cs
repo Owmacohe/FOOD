@@ -6,6 +6,8 @@ public class DirectionController : MonoBehaviour
     [SerializeField]
     Transform arrow;
     [SerializeField]
+    Transform strengthMeter;
+    [SerializeField]
     Transform boat;
     [SerializeField]
     float rotationSpeed;
@@ -18,7 +20,7 @@ public class DirectionController : MonoBehaviour
 
     Rigidbody rb;
     
-    bool isRotating, isArriving, isFadingOut;
+    bool isRotating, isArriving, isFadingOut, isShrinking;
     int rotationDirection;
     Vector3 tempDirection, direction;
 
@@ -67,7 +69,9 @@ public class DirectionController : MonoBehaviour
             startTime = Time.time;
         
             tempDirection = dir;
-            rotationDirection *= -1;   
+            rotationDirection *= -1;
+
+            StartCoroutine(StrengthMeterChange(true));
         }
     }
 
@@ -84,7 +88,9 @@ public class DirectionController : MonoBehaviour
             }
 
             direction = tempDirection;
-            rb.velocity += direction * forceSpeed;   
+            rb.velocity += direction * forceSpeed;
+
+            StartCoroutine(StrengthMeterChange(false));
         }
     }
 
@@ -135,6 +141,32 @@ public class DirectionController : MonoBehaviour
         }
     }
 
+    IEnumerator StrengthMeterChange(bool grow)
+    {
+        if (grow)
+        {
+            while (strengthMeter.localPosition.z < 1.2f && !isShrinking)
+            {
+                strengthMeter.localPosition += Vector3.forward * 0.03f;
+                
+                yield return new WaitForSeconds(0.01f);
+            }
+        }
+        else
+        {
+            isShrinking = true;
+            
+            while (strengthMeter.localPosition.z > -1)
+            {
+                strengthMeter.localPosition -= Vector3.forward * 0.03f;
+                
+                yield return new WaitForSeconds(0.01f);
+            }
+
+            isShrinking = false;
+        }
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Finish"))
@@ -149,6 +181,7 @@ public class DirectionController : MonoBehaviour
             
             StartCoroutine(ArriveGently(3));
             StartCoroutine(FadeArrow(true));
+            StartCoroutine(StrengthMeterChange(false));
         }
     }
 
