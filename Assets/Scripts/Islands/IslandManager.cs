@@ -40,7 +40,7 @@ public class IslandManager : MonoBehaviour
         deliveryTarget = null;
         deliveryStartTime = 0;
         
-        // TODO: add win condition?
+        // TODO: add win condition
         
         Reset();
     }

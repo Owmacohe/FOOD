@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 19463910}
   - component: {fileID: 19463909}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: WaterBackgroundPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -213,13 +213,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 19463908}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -10, z: 0}
-  m_LocalScale: {x: 20, y: 20, z: 20}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -50, z: 0}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_Father: {fileID: 1251863352}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &217964283
 GameObject:
@@ -255,7 +255,7 @@ Transform:
   - {fileID: 1930269119}
   - {fileID: 1355629901}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &298973045 stripped
 Transform:
@@ -295,7 +295,7 @@ Transform:
   - {fileID: 643532775}
   - {fileID: 358631659}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &358631658
 PrefabInstance:
@@ -598,7 +598,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9108637940812587639, guid: d8fa3d7cffe3c884fa556e8f90b3a17d, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 9108637940812587639, guid: d8fa3d7cffe3c884fa556e8f90b3a17d, type: 3}
       propertyPath: m_AnchorMax.x
@@ -770,7 +770,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 19463912}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -845,7 +846,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5390885320183488005, guid: aa9195a1d7448df42afe1ef458e78a4d, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5390885320183488005, guid: aa9195a1d7448df42afe1ef458e78a4d, type: 3}
       propertyPath: m_LocalPosition.x
