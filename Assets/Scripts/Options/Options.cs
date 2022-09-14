@@ -51,8 +51,6 @@ public class Options
             + "\n" + MusicVolume
             + "\n" + SoundEffectVolume
         );
-        
-        AssetDatabase.Refresh();
     }
 
     public string ToString()
