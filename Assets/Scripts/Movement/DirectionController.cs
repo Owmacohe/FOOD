@@ -142,7 +142,7 @@ public class DirectionController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Finish"))
+        if (collision.transform.parent.parent.gameObject.CompareTag("Finish"))
         {
             isRotating = true;
             isArriving = false;
