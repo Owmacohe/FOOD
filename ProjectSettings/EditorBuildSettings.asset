@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Ocean.unity
+    guid: c3636288e2c8a7d429154461ec3fdfd0
   m_configObjects: {}
