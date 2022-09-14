@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
+    Options playerOptions;
     DirectionController direction;
 
     bool isDown;
@@ -10,6 +11,7 @@ public class InputManager : MonoBehaviour
 
     void Start()
     {
+        playerOptions = new Options(true);
         direction = GetComponent<DirectionController>();
     }
     
@@ -25,18 +27,19 @@ public class InputManager : MonoBehaviour
 
     void OnShort()
     {
-        // TODO: check if currentKeyName equals the Option object's CurrentKey
-        
-        if (!isDown)
+        if (currentKeyName.Equals(playerOptions.CurrentKey))
         {
-            direction.SetDirection();
-        }
-        else
-        {
-            direction.SetForce();
-        }
+            if (!isDown)
+            {
+                direction.SetDirection();
+            }
+            else
+            {
+                direction.SetForce();
+            }
         
-        isDown = !isDown;
+            isDown = !isDown;   
+        }
     }
 
     /*
