@@ -18,7 +18,7 @@ public class DirectionController : MonoBehaviour
 
     Rigidbody rb;
     
-    bool isRotating, isArriving;
+    bool isRotating, isArriving, isFadingOut;
     int rotationDirection;
     Vector3 tempDirection, direction;
 
@@ -46,9 +46,12 @@ public class DirectionController : MonoBehaviour
         {
             arrow.RotateAround(transform.position, Vector3.up, rotationSpeed * rotationDirection);
         }
-        
-        Quaternion lookRotation = Quaternion.LookRotation((direction).normalized);
-        boat.rotation = Quaternion.Slerp(boat.rotation, lookRotation, Time.deltaTime * rotationSpeed * 0.5f);
+
+        if (!direction.Equals(Vector3.zero))
+        {
+            Quaternion lookRotation = Quaternion.LookRotation((direction).normalized);
+            boat.rotation = Quaternion.Slerp(boat.rotation, lookRotation, Time.deltaTime * rotationSpeed * 0.5f);   
+        }
     }
 
     public void SetDirection()
@@ -105,21 +108,30 @@ public class DirectionController : MonoBehaviour
     {
         SpriteRenderer rend = arrow.GetComponentInChildren<SpriteRenderer>();
         Color temp = rend.color;
-        
-        for (float i = 0; i < 10; i++)
+
+        if (fadeOut)
         {
-            if (fadeOut)
+            isFadingOut = true;
+            
+            while (rend.color.a > 0)
             {
                 rend.color = new Color(temp.r, temp.g, temp.b, temp.a - 0.1f);
+                temp = rend.color;
+
+                yield return new WaitForSeconds(0.1f);
             }
-            else
+            
+            isFadingOut = false;
+        }
+        else
+        {
+            while (rend.color.a < 1 && !isFadingOut)
             {
                 rend.color = new Color(temp.r, temp.g, temp.b, temp.a + 0.1f);
+                temp = rend.color;
+
+                yield return new WaitForSeconds(0.1f);
             }
-
-            temp = rend.color;
-
-            yield return new WaitForSeconds(0.1f);
         }
     }
 
@@ -142,7 +154,9 @@ public class DirectionController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Finish"))
+        Transform grandparent = collision.transform.parent.parent;
+    
+        if (collision.gameObject.CompareTag("Finish") || (grandparent != null && grandparent.gameObject.CompareTag("Finish")))
         {
             isRotating = true;
             isArriving = false;
