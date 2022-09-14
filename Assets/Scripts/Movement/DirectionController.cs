@@ -20,14 +20,14 @@ public class DirectionController : MonoBehaviour
     
     bool isRotating, isArriving;
     int rotationDirection;
-    Vector3 direction;
+    Vector3 tempDirection, direction;
 
     float startTime;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        
+
         isRotating = true;
         rotationDirection = 1;
     }
@@ -45,18 +45,15 @@ public class DirectionController : MonoBehaviour
         if (isRotating)
         {
             arrow.RotateAround(transform.position, Vector3.up, rotationSpeed * rotationDirection);
-
-            if (!direction.Equals(Vector3.zero))
-            {
-                Quaternion lookRotation = Quaternion.LookRotation((direction).normalized);
-                boat.rotation = Quaternion.Slerp(boat.rotation, lookRotation, Time.deltaTime * rotationSpeed * 0.5f);   
-            }
         }
+        
+        Quaternion lookRotation = Quaternion.LookRotation((direction).normalized);
+        boat.rotation = Quaternion.Slerp(boat.rotation, lookRotation, Time.deltaTime * rotationSpeed * 0.5f);
     }
 
     public void SetDirection()
     {
-        SetDirection((arrow.position - transform.position).normalized);
+        SetDirection(arrow.forward);
     }
     
     void SetDirection(Vector3 dir)
@@ -66,7 +63,7 @@ public class DirectionController : MonoBehaviour
             isRotating = false;
             startTime = Time.time;
         
-            direction = dir;
+            tempDirection = dir;
             rotationDirection *= -1;   
         }
     }
@@ -82,7 +79,8 @@ public class DirectionController : MonoBehaviour
             {
                 forceSpeed = forceSpeedMax;
             }
-        
+
+            direction = tempDirection;
             rb.velocity += direction * forceSpeed;   
         }
     }
@@ -105,7 +103,7 @@ public class DirectionController : MonoBehaviour
     
     IEnumerator FadeArrow(bool fadeOut)
     {
-        SpriteRenderer rend = arrow.GetComponent<SpriteRenderer>();
+        SpriteRenderer rend = arrow.GetComponentInChildren<SpriteRenderer>();
         Color temp = rend.color;
         
         for (float i = 0; i < 10; i++)
