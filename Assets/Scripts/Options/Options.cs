@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 
 public class Options
@@ -38,28 +37,20 @@ public class Options
         SoundEffectVolume = 0.5f;
         
         WriteToFile();
-        
-        Debug.Log(ToString());
     }
 
     public void WriteToFile()
     {
-        File.WriteAllText(path + "player_options.txt",
-            CurrentKey
-            + "\n" + Convert.ToInt32(IsMuted)
-            + "\n" + MasterVolume
-            + "\n" + MusicVolume
-            + "\n" + SoundEffectVolume
-        );
+        File.WriteAllText(path + "player_options.txt", ToString());
     }
 
     public string ToString()
     {
         return
-            "key: " + CurrentKey
-            + ", muted: " + IsMuted
-            + ", master volume: " + MasterVolume
-            + ", music volume: " + MusicVolume
-            + ", sound effect volume: " + SoundEffectVolume;
+            CurrentKey
+            + "\n" + Convert.ToInt32(IsMuted)
+            + "\n" + MasterVolume
+            + "\n" + MusicVolume
+            + "\n" + SoundEffectVolume;
     }
 }
