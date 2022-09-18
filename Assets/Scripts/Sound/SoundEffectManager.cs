@@ -6,12 +6,17 @@ public class SoundEffectManager : MonoBehaviour
 {
     [SerializeField]
     AudioClip[] clips;
+    [SerializeField, Range(0, 1)]
+    float volume = 0.5f;
+    [SerializeField]
+    bool changePitch;
     [SerializeField]
     bool makeSoundsRandomly;
     [SerializeField]
-    float randomChance = 100;
+    int randomChance = 100;
     
     AudioSource source;
+    AudioClip lastPlayed;
     
     void Start()
     {
@@ -21,7 +26,7 @@ public class SoundEffectManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (makeSoundsRandomly && Random.Range(0, randomChance) == 0)
+        if (makeSoundsRandomly && Random.Range(0, randomChance) == 0 && !source.isPlaying)
         {
             Play();
         }
@@ -30,7 +35,24 @@ public class SoundEffectManager : MonoBehaviour
     public void Play()
     {
         source.clip = clips[Random.Range(0, clips.Length)];
-        source.pitch = 1 + Random.Range(-0.5f, 0.5f);
+
+        if (clips.Length > 1)
+        {
+            while (source.clip.Equals(lastPlayed))
+            {
+                source.clip = clips[Random.Range(0, clips.Length)];
+            }
+        }
+        
+        source.volume = volume;
+
+        if (changePitch)
+        {
+            source.pitch = 1 + Random.Range(-0.5f, 0.5f);
+        }
+        
         source.Play();
+        
+        lastPlayed = source.clip;
     }
 }

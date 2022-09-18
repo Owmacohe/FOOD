@@ -19,6 +19,7 @@ public class DirectionController : MonoBehaviour
     float forceSpeedModifier;
 
     Rigidbody rb;
+    SoundEffectManager sound;
     
     bool isRotating, isArriving, isFadingOut, isShrinking;
     int rotationDirection;
@@ -29,6 +30,7 @@ public class DirectionController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        sound = GetComponent<SoundEffectManager>();
 
         isRotating = true;
         rotationDirection = 1;
@@ -194,6 +196,8 @@ public class DirectionController : MonoBehaviour
             isRotating = true;
             isArriving = false;
             rb.velocity = Vector3.zero;
+            
+            sound.Play();
             
             StartCoroutine(FadeArrow(false));
         }
