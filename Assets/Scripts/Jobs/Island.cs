@@ -2,14 +2,14 @@
 
 public class Island
 {
-    public Vector3 Position { get; private set; }
-    public int FoodRequired { get; private set; } // TODO: presently, this is unused
+    public GameObject Object { get; private set; }
+    public int FoodRequired { get; private set; }
     public float DeliveryTime { get; private set; }
     public float Reward { get; private set; }
 
-    public Island(Vector3 position, int foodRequired, float deliveryTime)
+    public Island(GameObject obj, int foodRequired, float deliveryTime)
     {
-        Position = position;
+        Object = obj;
         FoodRequired = foodRequired;
         DeliveryTime = deliveryTime;
     }
