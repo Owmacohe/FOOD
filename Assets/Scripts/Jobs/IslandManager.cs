@@ -46,6 +46,8 @@ public class IslandManager : MonoBehaviour
         }
         
         // TODO: spawn other obstacles
+        
+        ChooseTarget();
     }
 
     Island CreateIsland(Transform trans)
@@ -60,7 +62,7 @@ public class IslandManager : MonoBehaviour
         Destroy(trans.gameObject);
         
         Island tempIsland = new Island(
-            trans.position,
+            temp,
             Random.Range(1, 15),
             Random.Range(0, 60) + 60 // TODO: this should be chosen based (somewhat) on current player distance to the island
         );
@@ -101,29 +103,40 @@ public class IslandManager : MonoBehaviour
     {
         deliveryTarget = islands[Random.Range(0, islands.Count)]; // TODO: this should be more likely to choose a closer target than a far one (or follow a preset path)
         deliveryStartTime = Time.time;
+        
+        print("Target position: " + deliveryTarget.Object.transform.position);
     }
 
-    void CompleteDelivery()
+    public void CompleteDelivery()
     {
         stats.Money += deliveryTarget.DeliveryTime - (Time.time - deliveryStartTime); // TODO: this may want to be tweaked still
         stats.JobCompletionTimes.Add(Time.time - deliveryStartTime);
         stats.JobMaxTimes.Add(deliveryTarget.DeliveryTime);
         stats.WriteToFile();
         
-        islands.Remove(deliveryTarget);
+        // TODO: update UI
         
         deliveryTarget = null;
         deliveryStartTime = 0;
         
-        // TODO: win state
-        
-        Reset();
+        islands.Remove(deliveryTarget);
+
+        if (islands.Count > 0)
+        {
+            Invoke(nameof(Reset), 0.5f);
+        }
+        else
+        {
+            // TODO: win state
+        }
     }
 
     void FailDelivery()
     {
         stats.Strikes++;
         stats.WriteToFile();
+        
+        // TODO: update UI
 
         if (stats.Strikes >= 3)
         {
@@ -131,15 +144,24 @@ public class IslandManager : MonoBehaviour
         }
         else
         {
-            Reset();   
+            Invoke(nameof(Reset), 0.5f); 
         }
     }
 
     void Reset()
     {
+        // TODO: this reset needs to be MUCH more graceful
+        
+        player.position = startingPosition.position;
+
         deliveryTarget = null;
         deliveryStartTime = 0;
         
-        ChooseTarget(); // TODO: this may want to be delayed
+        ChooseTarget();
+    }
+
+    public bool IsDeliveryTarget(GameObject island)
+    {
+        return deliveryTarget.Object.Equals(island);
     }
 }

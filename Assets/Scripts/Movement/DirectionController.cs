@@ -20,6 +20,7 @@ public class DirectionController : MonoBehaviour
 
     Rigidbody rb;
     SoundEffectManager sound;
+    IslandManager islands;
     
     bool isRotating, isArriving, isFadingOut, isShrinking;
     int rotationDirection;
@@ -31,6 +32,7 @@ public class DirectionController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         sound = GetComponent<SoundEffectManager>();
+        islands = FindObjectOfType<IslandManager>();
 
         isRotating = true;
         rotationDirection = 1;
@@ -171,7 +173,7 @@ public class DirectionController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Finish"))
+        if (other.CompareTag("Finish") && islands.IsDeliveryTarget(other.gameObject))
         {
             isRotating = false;
             isArriving = true;
@@ -191,7 +193,8 @@ public class DirectionController : MonoBehaviour
     {
         Transform grandparent = collision.transform.parent.parent;
     
-        if (collision.gameObject.CompareTag("Finish") || (grandparent != null && grandparent.gameObject.CompareTag("Finish")))
+        if ((collision.gameObject.CompareTag("Finish") && islands.IsDeliveryTarget(collision.gameObject))
+            || (grandparent != null && grandparent.gameObject.CompareTag("Finish") && islands.IsDeliveryTarget(grandparent.gameObject)))
         {
             isRotating = true;
             isArriving = false;
@@ -200,6 +203,8 @@ public class DirectionController : MonoBehaviour
             sound.Play();
             
             StartCoroutine(FadeArrow(false));
+            
+            islands.CompleteDelivery();
         }
     }
 }
