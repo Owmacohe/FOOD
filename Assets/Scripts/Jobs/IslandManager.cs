@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class IslandManager : MonoBehaviour
 {
+    [SerializeField]
+    Transform targetArrow;
+    
     [SerializeField]
     Transform startingPosition;
     [SerializeField]
@@ -17,8 +21,20 @@ public class IslandManager : MonoBehaviour
     [SerializeField]
     GameObject[] rockPrefabs;
 
+    [SerializeField]
+    GameObject endStateCanvas;
+    [SerializeField]
+    Image endStateImage;
+    [SerializeField]
+    TMP_Text endStateText;
+    [SerializeField]
+    Sprite winState, loseState;
+
     Transform player;
     Stats stats;
+    UIManager UI;
+    InputManager input;
+    DirectionController direction;
     
     List<Island> islands;
     Island deliveryTarget;
@@ -28,10 +44,17 @@ public class IslandManager : MonoBehaviour
 
     void Start()
     {
-        stats = new Stats(true);
-        
         player = GameObject.FindWithTag("Player").transform;
         player.position = startingPosition.position;
+        stats = new Stats(true);
+        UI = FindObjectOfType<UIManager>();
+        input = FindObjectOfType<InputManager>();
+        direction = FindObjectOfType<DirectionController>();
+        
+        UI.SetMoney(stats.Money);
+        // TODO: set UI highscore here too
+        
+        endStateCanvas.SetActive(false);
 
         islands = new List<Island>();
 
@@ -48,6 +71,21 @@ public class IslandManager : MonoBehaviour
         // TODO: spawn other obstacles
         
         ChooseTarget();
+    }
+
+    void FixedUpdate()
+    {
+        if (deliveryTarget != null)
+        {
+            targetArrow.LookAt(deliveryTarget.Object.transform);
+            
+            UI.SetTimer(deliveryTarget.DeliveryTime - (Time.time - deliveryStartTime));
+
+            if ((Time.time - deliveryStartTime) > deliveryTarget.DeliveryTime)
+            {
+                FailDelivery();
+            }
+        }
     }
 
     Island CreateIsland(Transform trans)
@@ -114,7 +152,7 @@ public class IslandManager : MonoBehaviour
         stats.JobMaxTimes.Add(deliveryTarget.DeliveryTime);
         stats.WriteToFile();
         
-        // TODO: update UI
+        UI.SetMoney(stats.Money);
         
         deliveryTarget = null;
         deliveryStartTime = 0;
@@ -123,11 +161,10 @@ public class IslandManager : MonoBehaviour
 
         if (islands.Count > 0)
         {
-            Invoke(nameof(Reset), 0.5f);
-        }
-        else
-        {
-            // TODO: win state
+            input.inputPaused = true;
+            SetEndState(true);
+            
+            Invoke(nameof(Reset), 3);
         }
     }
 
@@ -136,26 +173,32 @@ public class IslandManager : MonoBehaviour
         stats.Strikes++;
         stats.WriteToFile();
         
-        // TODO: update UI
+        UI.SetStrikes(stats.Strikes);
+        
+        input.inputPaused = true;
+        SetEndState(false);
+            
+        Invoke(nameof(Reset), 0.5f);
 
         if (stats.Strikes >= 3)
         {
-            // TODO: lose state
-        }
-        else
-        {
-            Invoke(nameof(Reset), 0.5f); 
+            // TODO: what happens after 3 strikes?
         }
     }
 
     void Reset()
     {
+        input.inputPaused = false;
+        endStateCanvas.SetActive(false);
+        
         // TODO: this reset needs to be MUCH more graceful
         
         player.position = startingPosition.position;
 
         deliveryTarget = null;
         deliveryStartTime = 0;
+
+        StartCoroutine(direction.FadeArrow(false));
         
         ChooseTarget();
     }
@@ -163,5 +206,21 @@ public class IslandManager : MonoBehaviour
     public bool IsDeliveryTarget(GameObject island)
     {
         return deliveryTarget.Object.Equals(island);
+    }
+
+    void SetEndState(bool isWin)
+    {
+        endStateCanvas.SetActive(true);
+        
+        if (isWin)
+        {
+            endStateImage.sprite = winState;
+            endStateText.text = "Yay! Delivery on time. You're a superstar!";
+        }
+        else
+        {
+            endStateImage.sprite = loseState;
+            endStateText.text = "Boo! All the food has spoiled. You ran out of time!";
+        }
     }
 }

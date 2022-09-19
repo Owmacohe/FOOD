@@ -114,7 +114,7 @@ public class DirectionController : MonoBehaviour
         }
     }
     
-    IEnumerator FadeArrow(bool fadeOut)
+    public IEnumerator FadeArrow(bool fadeOut)
     {
         SpriteRenderer rend = arrow.GetComponentInChildren<SpriteRenderer>();
         Color temp = rend.color;
