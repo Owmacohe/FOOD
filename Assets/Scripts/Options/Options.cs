@@ -10,14 +10,14 @@ public class Options
     public float MasterVolume { get; set; }
     public float MusicVolume { get; set; }
     public float SoundEffectVolume { get; set; }
-    
-    string path = Application.dataPath + "/Scripts/Options/";
 
     public Options(bool fromFile)
     {
+        string text = Resources.Load<TextAsset>("player_options").text;
+        
         if (fromFile)
         {
-            string[] lines = File.ReadAllLines(path + "player_options.txt");
+            string[] lines = text.Split('\n');
 
             if (lines.Length != 0)
             {
@@ -38,28 +38,20 @@ public class Options
         SoundEffectVolume = 0.5f;
         
         WriteToFile();
-        
-        Debug.Log(ToString());
     }
 
     public void WriteToFile()
     {
-        File.WriteAllText(path + "player_options.txt",
-            CurrentKey
-            + "\n" + Convert.ToInt32(IsMuted)
-            + "\n" + MasterVolume
-            + "\n" + MusicVolume
-            + "\n" + SoundEffectVolume
-        );
+        File.WriteAllText(Application.dataPath + "/Resources/player_options.txt", ToString());
     }
 
     public string ToString()
     {
         return
-            "key: " + CurrentKey
-            + ", muted: " + IsMuted
-            + ", master volume: " + MasterVolume
-            + ", music volume: " + MusicVolume
-            + ", sound effect volume: " + SoundEffectVolume;
+            CurrentKey
+            + "\n" + Convert.ToInt32(IsMuted)
+            + "\n" + MasterVolume
+            + "\n" + MusicVolume
+            + "\n" + SoundEffectVolume;
     }
 }

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
+    public bool inputPaused;
+    
     Options playerOptions;
     DirectionController direction;
 
@@ -13,6 +15,8 @@ public class InputManager : MonoBehaviour
     {
         playerOptions = new Options(true);
         direction = GetComponent<DirectionController>();
+        
+        FindObjectOfType<UIManager>().SetMoveButtonKey(playerOptions.CurrentKey);
     }
     
     void OnGUI()
@@ -27,7 +31,7 @@ public class InputManager : MonoBehaviour
 
     void OnShort()
     {
-        if (currentKeyName.Equals(playerOptions.CurrentKey))
+        if (!inputPaused && currentKeyName.Equals(playerOptions.CurrentKey))
         {
             if (!isDown)
             {

@@ -6,6 +6,8 @@ public class DirectionController : MonoBehaviour
     [SerializeField]
     Transform arrow;
     [SerializeField]
+    Transform strengthMeter;
+    [SerializeField]
     Transform boat;
     [SerializeField]
     float rotationSpeed;
@@ -17,8 +19,10 @@ public class DirectionController : MonoBehaviour
     float forceSpeedModifier;
 
     Rigidbody rb;
+    SoundEffectManager sound;
+    IslandManager islands;
     
-    bool isRotating, isArriving, isFadingOut;
+    bool isRotating, isArriving, isFadingOut, isShrinking;
     int rotationDirection;
     Vector3 tempDirection, direction;
 
@@ -27,6 +31,8 @@ public class DirectionController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        sound = GetComponent<SoundEffectManager>();
+        islands = FindObjectOfType<IslandManager>();
 
         isRotating = true;
         rotationDirection = 1;
@@ -67,7 +73,9 @@ public class DirectionController : MonoBehaviour
             startTime = Time.time;
         
             tempDirection = dir;
-            rotationDirection *= -1;   
+            rotationDirection *= -1;
+
+            StartCoroutine(StrengthMeterChange(true));
         }
     }
 
@@ -84,7 +92,9 @@ public class DirectionController : MonoBehaviour
             }
 
             direction = tempDirection;
-            rb.velocity += direction * forceSpeed;   
+            rb.velocity += direction * forceSpeed;
+
+            StartCoroutine(StrengthMeterChange(false));
         }
     }
 
@@ -104,7 +114,7 @@ public class DirectionController : MonoBehaviour
         }
     }
     
-    IEnumerator FadeArrow(bool fadeOut)
+    public IEnumerator FadeArrow(bool fadeOut)
     {
         SpriteRenderer rend = arrow.GetComponentInChildren<SpriteRenderer>();
         Color temp = rend.color;
@@ -135,9 +145,35 @@ public class DirectionController : MonoBehaviour
         }
     }
 
+    IEnumerator StrengthMeterChange(bool grow)
+    {
+        if (grow)
+        {
+            while (strengthMeter.localPosition.z < 1.2f && !isShrinking)
+            {
+                strengthMeter.localPosition += Vector3.forward * 0.03f;
+                
+                yield return new WaitForSeconds(0.01f);
+            }
+        }
+        else
+        {
+            isShrinking = true;
+            
+            while (strengthMeter.localPosition.z > -1)
+            {
+                strengthMeter.localPosition -= Vector3.forward * 0.03f;
+                
+                yield return new WaitForSeconds(0.01f);
+            }
+
+            isShrinking = false;
+        }
+    }
+
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Finish"))
+        if (other.CompareTag("Finish") && islands.IsDeliveryTarget(other.gameObject))
         {
             isRotating = false;
             isArriving = true;
@@ -149,6 +185,7 @@ public class DirectionController : MonoBehaviour
             
             StartCoroutine(ArriveGently(3));
             StartCoroutine(FadeArrow(true));
+            StartCoroutine(StrengthMeterChange(false));
         }
     }
 
@@ -156,13 +193,18 @@ public class DirectionController : MonoBehaviour
     {
         Transform grandparent = collision.transform.parent.parent;
     
-        if (collision.gameObject.CompareTag("Finish") || (grandparent != null && grandparent.gameObject.CompareTag("Finish")))
+        if ((collision.gameObject.CompareTag("Finish") && islands.IsDeliveryTarget(collision.gameObject))
+            || (grandparent != null && grandparent.gameObject.CompareTag("Finish") && islands.IsDeliveryTarget(grandparent.gameObject)))
         {
             isRotating = true;
             isArriving = false;
             rb.velocity = Vector3.zero;
             
+            sound.Play();
+            
             StartCoroutine(FadeArrow(false));
+            
+            islands.CompleteDelivery();
         }
     }
 }
