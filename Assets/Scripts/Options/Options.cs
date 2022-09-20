@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 public class Options
@@ -9,14 +10,14 @@ public class Options
     public float MasterVolume { get; set; }
     public float MusicVolume { get; set; }
     public float SoundEffectVolume { get; set; }
-    
-    string path = Application.dataPath + "/Scripts/Options/";
 
     public Options(bool fromFile)
     {
+        string text = Resources.Load<TextAsset>("player_options").text;
+        
         if (fromFile)
         {
-            string[] lines = File.ReadAllLines(path + "player_options.txt");
+            string[] lines = text.Split('\n');
 
             if (lines.Length != 0)
             {
@@ -41,7 +42,7 @@ public class Options
 
     public void WriteToFile()
     {
-        File.WriteAllText(path + "player_options.txt", ToString());
+        File.WriteAllText(Application.dataPath + "/Resources/player_options.txt", ToString());
     }
 
     public string ToString()

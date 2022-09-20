@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 public class Stats
@@ -11,13 +12,13 @@ public class Stats
     public List<float> JobMaxTimes { get; set; }
     public List<float> JobCompletionTimes { get; set; }
     
-    string path = Application.dataPath + "/Scripts/Jobs/";
-    
     public Stats(bool fromFile)
     {
+        string text = Resources.Load<TextAsset>("player_stats").text;
+        
         if (fromFile)
         {
-            string[] lines = File.ReadAllLines(path + "player_stats.txt");
+            string[] lines = text.Split('\n');
 
             if (lines.Length == 5)
             {
@@ -58,7 +59,7 @@ public class Stats
     
     public void WriteToFile()
     {
-        File.WriteAllText(path + "player_stats.txt", ToString());
+        File.WriteAllText(Application.dataPath + "/Resources/player_stats.txt", ToString());
     }
     
     public string ToString()
