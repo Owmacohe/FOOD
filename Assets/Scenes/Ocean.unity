@@ -424,6 +424,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6429470902015688996, guid: d8fa3d7cffe3c884fa556e8f90b3a17d, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9108637940812587595, guid: d8fa3d7cffe3c884fa556e8f90b3a17d, type: 3}
       propertyPath: m_Name
       value: CanvasMain
