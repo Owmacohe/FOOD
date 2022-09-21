@@ -4,9 +4,13 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     public bool inputPaused;
+
+    [SerializeField]
+    bool isMenu;
     
     Options playerOptions;
     DirectionController direction;
+    MenuInteraction menu;
 
     bool isDown;
     string currentKeyName;
@@ -14,9 +18,16 @@ public class InputManager : MonoBehaviour
     void Start()
     {
         playerOptions = new Options(true);
-        direction = GetComponent<DirectionController>();
-        
-        FindObjectOfType<UIManager>().SetMoveButtonKey(playerOptions.CurrentKey);
+
+        if (!isMenu)
+        {
+            direction = GetComponent<DirectionController>();
+            FindObjectOfType<UIManager>().SetMoveButtonKey(playerOptions.CurrentKey);   
+        }
+        else
+        {
+            menu = GetComponent<MenuInteraction>();
+        }
     }
     
     void OnGUI()
@@ -33,23 +44,37 @@ public class InputManager : MonoBehaviour
     {
         if (!inputPaused && currentKeyName.Equals(playerOptions.CurrentKey))
         {
-            if (!isDown)
+            if (!isMenu)
             {
-                direction.SetDirection();
+                if (!isDown)
+                {
+                    direction.SetDirection();
+                }
+                else
+                {
+                    direction.SetForce();
+                }
             }
             else
             {
-                direction.SetForce();
+                if (isDown)
+                {
+                    menu.GoToNextItem();   
+                }
             }
-        
-            isDown = !isDown;   
+            
+            isDown = !isDown; 
         }
     }
 
-    /*
     void OnLong()
     {
-        print("long");
+        if (!inputPaused && currentKeyName.Equals(playerOptions.CurrentKey))
+        {
+            if (isMenu)
+            {
+                
+            }
+        }
     }
-    */
 }
