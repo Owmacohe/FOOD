@@ -17,9 +17,16 @@ public class DirectionController : MonoBehaviour
     float forceSpeedMax;
     [SerializeField]
     float forceSpeedModifier;
+    
+    [SerializeField]
+    GameObject tutorialCanvas;
+    
+    [SerializeField]
+    SoundEffectManager creakingSound;
+    [SerializeField]
+    SoundEffectManager strengthSound;
 
     Rigidbody rb;
-    SoundEffectManager sound;
     IslandManager islands;
     
     bool isRotating, isArriving, isFadingOut, isShrinking;
@@ -31,7 +38,6 @@ public class DirectionController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        sound = GetComponent<SoundEffectManager>();
         islands = FindObjectOfType<IslandManager>();
 
         isRotating = true;
@@ -59,6 +65,11 @@ public class DirectionController : MonoBehaviour
             boat.rotation = Quaternion.Slerp(boat.rotation, lookRotation, Time.deltaTime * rotationSpeed * 0.5f);   
         }
     }
+    
+    void HideTutorial()
+    {
+        tutorialCanvas.SetActive(false);
+    }
 
     public void SetDirection()
     {
@@ -69,6 +80,13 @@ public class DirectionController : MonoBehaviour
     {
         if (!isArriving)
         {
+            if (tutorialCanvas != null && Time.time > 10)
+            {
+                HideTutorial();
+            }
+            
+            strengthSound.Play();
+            
             isRotating = false;
             startTime = Time.time;
         
@@ -191,8 +209,13 @@ public class DirectionController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        Transform grandparent = collision.transform.parent.parent;
-    
+        Transform grandparent = null;
+
+        if (collision.transform.parent != null)
+        {
+            grandparent = collision.transform.parent.parent;   
+        }
+
         if ((collision.gameObject.CompareTag("Finish") && islands.IsDeliveryTarget(collision.gameObject))
             || (grandparent != null && grandparent.gameObject.CompareTag("Finish") && islands.IsDeliveryTarget(grandparent.gameObject)))
         {
@@ -200,7 +223,7 @@ public class DirectionController : MonoBehaviour
             isArriving = false;
             rb.velocity = Vector3.zero;
             
-            sound.Play();
+            creakingSound.Play();
             
             StartCoroutine(FadeArrow(false));
             
