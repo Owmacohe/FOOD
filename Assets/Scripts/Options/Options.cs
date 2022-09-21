@@ -19,7 +19,7 @@ public class Options
         {
             string[] lines = text.Split('\n');
 
-            if (lines.Length != 0)
+            if (lines.Length == 5)
             {
                 CurrentKey = lines[0];
                 IsMuted = Convert.ToBoolean(int.Parse(lines[1]));
