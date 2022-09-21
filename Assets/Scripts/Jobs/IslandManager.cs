@@ -39,6 +39,7 @@ public class IslandManager : MonoBehaviour
     List<Island> islands;
     Island deliveryTarget;
     float deliveryStartTime;
+    bool hasJustFailedDelivery;
     
     enum ObstacleType { Rock, Whirlpool, Pirates }
 
@@ -81,7 +82,7 @@ public class IslandManager : MonoBehaviour
             
             UI.SetTimer(deliveryTarget.DeliveryTime - (Time.time - deliveryStartTime));
 
-            if ((Time.time - deliveryStartTime) > deliveryTarget.DeliveryTime)
+            if (!hasJustFailedDelivery && (Time.time - deliveryStartTime) > deliveryTarget.DeliveryTime)
             {
                 FailDelivery();
             }
@@ -147,7 +148,7 @@ public class IslandManager : MonoBehaviour
 
     public void CompleteDelivery()
     {
-        stats.Money += deliveryTarget.DeliveryTime - (Time.time - deliveryStartTime); // TODO: this may want to be tweaked still
+        stats.Money += Mathf.RoundToInt((deliveryTarget.DeliveryTime - (Time.time - deliveryStartTime)) * 100f) / 100f; // TODO: this may want to be tweaked still
         stats.JobCompletionTimes.Add(Time.time - deliveryStartTime);
         stats.JobMaxTimes.Add(deliveryTarget.DeliveryTime);
         stats.WriteToFile();
@@ -170,6 +171,10 @@ public class IslandManager : MonoBehaviour
 
     void FailDelivery()
     {
+        print("fail");
+        
+        hasJustFailedDelivery = true;
+        
         stats.Strikes++;
         stats.WriteToFile();
         
@@ -178,7 +183,7 @@ public class IslandManager : MonoBehaviour
         input.inputPaused = true;
         SetEndState(false);
             
-        Invoke(nameof(Reset), 0.5f);
+        Invoke(nameof(Reset), 3);
 
         if (stats.Strikes >= 3)
         {
@@ -188,6 +193,8 @@ public class IslandManager : MonoBehaviour
 
     void Reset()
     {
+        hasJustFailedDelivery = false;
+        
         input.inputPaused = false;
         endStateCanvas.SetActive(false);
         

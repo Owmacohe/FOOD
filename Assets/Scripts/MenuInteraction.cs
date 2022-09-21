@@ -1,15 +1,29 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MenuInteraction : MonoBehaviour
 {
+    [SerializeField]
+    TMP_Text instructionText1;
+    [SerializeField]
+    TMP_Text instructionText2;
+    
     GameObject[] menuItems;
     int currentItem;
     
     void Start()
     {
         menuItems = GameObject.FindGameObjectsWithTag("MenuItem");
+
+        if (instructionText1 != null && instructionText2 != null)
+        {
+            Options playerOptions = new Options(true);
+            
+            instructionText1.text = "Press " + playerOptions.CurrentKey + " to switch selection >";
+            instructionText2.text = "Hold " + playerOptions.CurrentKey + " to confirm selection";
+        }
 
         foreach (GameObject i in menuItems)
         {
@@ -45,6 +59,11 @@ public class MenuInteraction : MonoBehaviour
 
     public void ActivateItem()
     {
+        SceneChanger temp = menuItems[currentItem].GetComponent<SceneChanger>();
         
+        if (temp != null)
+        {
+            temp.Change(temp.target);
+        }
     }
 }

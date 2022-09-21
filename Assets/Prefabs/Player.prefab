@@ -693,7 +693,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5390885320156171068}
-  m_LocalRotation: {x: 0.3420201, y: 0, z: 0, w: 0.9396927}
+  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 15, z: -13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -843,6 +843,7 @@ GameObject:
   - component: {fileID: 5390885320183488004}
   - component: {fileID: 5390885320183488001}
   - component: {fileID: 624395686613610848}
+  - component: {fileID: 1298326687647493270}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -928,6 +929,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputPaused: 0
+  isMenu: 0
 --- !u!114 &5390885320183488001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -947,6 +949,9 @@ MonoBehaviour:
   forceSpeed: 0
   forceSpeedMax: 5
   forceSpeedModifier: 4
+  tutorialCanvas: {fileID: 0}
+  creakingSound: {fileID: 624395686613610848}
+  strengthSound: {fileID: 1298326687647493270}
 --- !u!114 &624395686613610848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -965,6 +970,24 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 75785abd8f140784b91cc24bbc879346, type: 3}
   volume: 0.5
   changePitch: 1
+  makeSoundsRandomly: 0
+  randomChance: 100
+--- !u!114 &1298326687647493270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5390885320183488010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac73d920208d4092ac638c915392cead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips:
+  - {fileID: 8300000, guid: 18f09ca48d9f5b54c87a03a6e8b3d202, type: 3}
+  volume: 0.5
+  changePitch: 0
   makeSoundsRandomly: 0
   randomChance: 100
 --- !u!1 &5473518700918897547

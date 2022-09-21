@@ -73,7 +73,7 @@ public class InputManager : MonoBehaviour
         {
             if (isMenu)
             {
-                
+                menu.ActivateItem();
             }
         }
     }
