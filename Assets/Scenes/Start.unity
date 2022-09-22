@@ -1253,7 +1253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f48d4336805f401387816e113fe27c7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: Ocean
+  target: Tutorial
 --- !u!1 &1619080570
 GameObject:
   m_ObjectHideFlags: 0
