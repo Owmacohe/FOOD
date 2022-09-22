@@ -19,6 +19,11 @@ public class DirectionController : MonoBehaviour
     float forceSpeedModifier;
     
     [SerializeField]
+    IslandManager islands;
+
+    [SerializeField]
+    bool showTutorial = true;
+    [SerializeField]
     GameObject tutorialCanvas;
     
     [SerializeField]
@@ -27,7 +32,6 @@ public class DirectionController : MonoBehaviour
     SoundEffectManager strengthSound;
 
     Rigidbody rb;
-    IslandManager islands;
     
     bool isRotating, isArriving, isFadingOut, isShrinking;
     int rotationDirection;
@@ -38,7 +42,6 @@ public class DirectionController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        islands = FindObjectOfType<IslandManager>();
 
         isRotating = true;
         rotationDirection = 1;
@@ -80,9 +83,9 @@ public class DirectionController : MonoBehaviour
     {
         if (!isArriving)
         {
-            if (tutorialCanvas != null && Time.time > 10)
+            if (showTutorial && tutorialCanvas != null && Time.time > 15)
             {
-                HideTutorial();
+                Invoke(nameof(HideTutorial), 5);
             }
             
             strengthSound.Play();

@@ -7,6 +7,13 @@ using Random = UnityEngine.Random;
 public class IslandManager : MonoBehaviour
 {
     [SerializeField]
+    bool isTesting;
+    [SerializeField]
+    bool isInteracting = true;
+    [SerializeField]
+    string nextScene;
+    
+    [SerializeField]
     Transform targetArrow;
     
     [SerializeField]
@@ -45,17 +52,20 @@ public class IslandManager : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindWithTag("Player").transform;
-        player.position = startingPosition.position;
-        stats = new Stats(true);
-        UI = FindObjectOfType<UIManager>();
-        input = FindObjectOfType<InputManager>();
-        direction = FindObjectOfType<DirectionController>();
+        if (isInteracting)
+        {
+            player = GameObject.FindWithTag("Player").transform;
+            player.position = startingPosition.position;
+            stats = new Stats(true);
+            UI = FindObjectOfType<UIManager>();
+            input = FindObjectOfType<InputManager>();
+            direction = FindObjectOfType<DirectionController>();
         
-        UI.SetMoney(stats.Money);
-        // TODO: set UI highscore here too
+            UI.SetMoney(stats.Money);
+            // TODO: set UI highscore here too
         
-        endStateCanvas.SetActive(false);
+            endStateCanvas.SetActive(false);
+        }
 
         islands = new List<Island>();
 
@@ -70,13 +80,16 @@ public class IslandManager : MonoBehaviour
         }
         
         // TODO: spawn other obstacles
-        
-        ChooseTarget();
+
+        if (isInteracting)
+        {
+            ChooseTarget();   
+        }
     }
 
     void FixedUpdate()
     {
-        if (deliveryTarget != null)
+        if (isInteracting && deliveryTarget != null)
         {
             targetArrow.LookAt(deliveryTarget.Object.transform);
             
@@ -143,7 +156,7 @@ public class IslandManager : MonoBehaviour
         deliveryTarget = islands[Random.Range(0, islands.Count)]; // TODO: this should be more likely to choose a closer target than a far one (or follow a preset path)
         deliveryStartTime = Time.time;
         
-        print("Target position: " + deliveryTarget.Object.transform.position);
+        //print("Target position: " + deliveryTarget.Object.transform.position);
     }
 
     public void CompleteDelivery()
@@ -193,21 +206,33 @@ public class IslandManager : MonoBehaviour
 
     void Reset()
     {
-        hasJustFailedDelivery = false;
+        if (isTesting)
+        {
+            hasJustFailedDelivery = false;
         
-        input.inputPaused = false;
-        endStateCanvas.SetActive(false);
+            input.inputPaused = false;
+            endStateCanvas.SetActive(false);
         
-        // TODO: this reset needs to be MUCH more graceful
-        
-        player.position = startingPosition.position;
+            player.position = startingPosition.position;
 
-        deliveryTarget = null;
-        deliveryStartTime = 0;
+            deliveryTarget = null;
+            deliveryStartTime = 0;
 
-        StartCoroutine(direction.FadeArrow(false));
+            StartCoroutine(direction.FadeArrow(false));
         
-        ChooseTarget();
+            ChooseTarget();
+        }
+        else
+        {
+            if (nextScene != "")
+            {
+                SceneChanger.StaticChange(nextScene);   
+            }
+            else
+            {
+                // TODO: all three levels complete
+            }
+        }
     }
 
     public bool IsDeliveryTarget(GameObject island)

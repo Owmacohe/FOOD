@@ -9,9 +9,15 @@ EditorBuildSettings:
     path: Assets/Scenes/Start.unity
     guid: 308c914efecae3342bb2e0857a1eba4f
   - enabled: 1
-    path: Assets/Scenes/Ocean.unity
-    guid: c3636288e2c8a7d429154461ec3fdfd0
-  - enabled: 1
     path: Assets/Scenes/Options.unity
     guid: 39df58597c2d8ad46879bbab6ea3fd7a
+  - enabled: 1
+    path: Assets/Scenes/Levels/Tutorial.unity
+    guid: c515c01bcc390f447b1c1f56dade746d
+  - enabled: 1
+    path: Assets/Scenes/Levels/Desert.unity
+    guid: 4d638aea462271d4b95f61d5067851db
+  - enabled: 1
+    path: Assets/Scenes/Levels/Volcano.unity
+    guid: 6bfe7cf792f47084c89e78a0c21d0eab
   m_configObjects: {}
