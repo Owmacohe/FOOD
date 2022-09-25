@@ -6,8 +6,8 @@ public class SoundEffectManager : MonoBehaviour
 {
     [SerializeField]
     AudioClip[] clips;
-    [SerializeField, Range(0, 1)]
-    float volume = 0.5f;
+    [Range(0, 1)]
+    public float volume = 0.5f;
     [SerializeField]
     bool changePitch;
     [SerializeField]
@@ -17,11 +17,14 @@ public class SoundEffectManager : MonoBehaviour
     
     AudioSource source;
     AudioClip lastPlayed;
+    Options playerOptions;
     
     void Start()
     {
         source = gameObject.AddComponent<AudioSource>();
         source.playOnAwake = false;
+        
+        playerOptions = new Options(true);
     }
 
     void FixedUpdate()
@@ -44,7 +47,7 @@ public class SoundEffectManager : MonoBehaviour
             }
         }
         
-        source.volume = volume;
+        source.volume = volume * playerOptions.MasterVolume;
 
         if (changePitch)
         {
@@ -54,5 +57,11 @@ public class SoundEffectManager : MonoBehaviour
         source.Play();
         
         lastPlayed = source.clip;
+    }
+    
+    public void ResetAudio()
+    {
+        playerOptions = new Options(true);
+        source.volume = volume * playerOptions.MasterVolume;
     }
 }

@@ -42,7 +42,7 @@ public class InputManager : MonoBehaviour
 
     void OnShort()
     {
-        if (!inputPaused && currentKeyName.Equals(playerOptions.CurrentKey))
+        if (!inputPaused && currentKeyName.Trim().Equals(playerOptions.CurrentKey.Trim()))
         {
             if (!isMenu)
             {
@@ -69,7 +69,7 @@ public class InputManager : MonoBehaviour
 
     void OnLong()
     {
-        if (!inputPaused && currentKeyName.Equals(playerOptions.CurrentKey))
+        if (!inputPaused && currentKeyName.Trim().Equals(playerOptions.CurrentKey.Trim()))
         {
             if (isMenu)
             {

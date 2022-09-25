@@ -52,7 +52,10 @@ public class OptionsMenu : MonoBehaviour
 
     public void Save()
     {
-        playerOptions.WriteToFile();
+        if (Time.time < 2)
+        {
+            playerOptions.WriteToFile();   
+        }
     }
     
     public void ListenForNewKey()
@@ -70,6 +73,8 @@ public class OptionsMenu : MonoBehaviour
     public void SetMasterVolume()
     {
         playerOptions.MasterVolume = masterVolume;
+        Save();
+        ResetAudioSources();
     }
     
     public void SetMusicVolume()
@@ -80,6 +85,19 @@ public class OptionsMenu : MonoBehaviour
     public void SetSoundEffectVolume()
     {
         playerOptions.SoundEffectVolume = soundEffectVolume;
+    }
+
+    void ResetAudioSources()
+    {
+        foreach (MusicManager i in FindObjectsOfType<MusicManager>())
+        {
+            i.ResetAudio();
+        }
+        
+        foreach (SoundEffectManager j in FindObjectsOfType<SoundEffectManager>())
+        {
+            j.ResetAudio();
+        }
     }
 
     void OnGUI()

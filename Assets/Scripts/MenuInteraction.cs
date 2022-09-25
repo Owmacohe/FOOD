@@ -63,6 +63,11 @@ public class MenuInteraction : MonoBehaviour
         
         if (temp != null)
         {
+            if (temp.isExit)
+            {
+                Application.Quit(0);
+            }
+            
             temp.Change(temp.target);
         }
     }
