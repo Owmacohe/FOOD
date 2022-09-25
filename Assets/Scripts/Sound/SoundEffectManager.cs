@@ -23,8 +23,6 @@ public class SoundEffectManager : MonoBehaviour
     {
         source = gameObject.AddComponent<AudioSource>();
         source.playOnAwake = false;
-        
-        playerOptions = new Options(true);
     }
 
     void FixedUpdate()
@@ -47,12 +45,14 @@ public class SoundEffectManager : MonoBehaviour
             }
         }
         
-        source.volume = volume * playerOptions.MasterVolume;
+        source.volume = volume;
 
         if (changePitch)
         {
             source.pitch = 1 + Random.Range(-0.5f, 0.5f);
         }
+        
+        ResetAudio();
         
         source.Play();
         
@@ -62,6 +62,6 @@ public class SoundEffectManager : MonoBehaviour
     public void ResetAudio()
     {
         playerOptions = new Options(true);
-        source.volume = volume * playerOptions.MasterVolume;
+        source.volume = volume * (playerOptions.MasterVolume * 2f);
     }
 }

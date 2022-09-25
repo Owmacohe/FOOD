@@ -12,13 +12,13 @@ public class MusicManager : MonoBehaviour
     
     void Start()
     {
-        playerOptions = new Options(true);
-        
         source = gameObject.AddComponent<AudioSource>();
         source.playOnAwake = false;
         source.loop = true;
         source.clip = clip;
-        source.volume = volume * playerOptions.MasterVolume;
+        source.volume = volume;
+        
+        ResetAudio();
         
         source.Play();
     }
@@ -26,6 +26,6 @@ public class MusicManager : MonoBehaviour
     public void ResetAudio()
     {
         playerOptions = new Options(true);
-        source.volume = volume * playerOptions.MasterVolume;
+        source.volume = volume * (playerOptions.MasterVolume * 2f);
     }
 }
