@@ -649,6 +649,7 @@ MonoBehaviour:
   forceSpeed: 0
   forceSpeedMax: 5
   forceSpeedModifier: 4
+  islands: {fileID: 0}
   showTutorial: 1
   tutorialCanvas: {fileID: 0}
   creakingSound: {fileID: 624395686613610848}
@@ -999,6 +1000,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 92b572664cecc4d4b917ed3d455ca3b1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7029948723529949830, guid: 92b572664cecc4d4b917ed3d455ca3b1, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 92b572664cecc4d4b917ed3d455ca3b1, type: 3}

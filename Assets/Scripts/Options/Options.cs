@@ -26,7 +26,7 @@ public class Options
                 MasterVolume = float.Parse(lines[2]);
                 MusicVolume = float.Parse(lines[3]);
                 SoundEffectVolume = float.Parse(lines[4]);
-
+                
                 return;
             }
         }
