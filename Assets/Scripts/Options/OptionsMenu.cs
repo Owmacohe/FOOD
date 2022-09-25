@@ -1,5 +1,6 @@
 ﻿using System;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,11 +30,14 @@ public class OptionsMenu : MonoBehaviour
         ResetUI(true);
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        masterVolume = masterVolumeSlider.value;
-        musicVolume = musicVolumeSlider.value;
-        soundEffectVolume = soundEffectVolumeSlider.value;
+        if (Time.time > 2)
+        {
+            masterVolume = masterVolumeSlider.value;
+            musicVolume = musicVolumeSlider.value;
+            soundEffectVolume = soundEffectVolumeSlider.value;   
+        }
     }
 
     void ResetUI(bool isFromStart = false)
@@ -52,10 +56,7 @@ public class OptionsMenu : MonoBehaviour
 
     public void Save()
     {
-        if (Time.time < 2)
-        {
-            playerOptions.WriteToFile();   
-        }
+        playerOptions.WriteToFile();
     }
     
     public void ListenForNewKey()
@@ -80,11 +81,15 @@ public class OptionsMenu : MonoBehaviour
     public void SetMusicVolume()
     {
         playerOptions.MusicVolume = musicVolume;
+        Save();
+        ResetAudioSources();
     }
     
     public void SetSoundEffectVolume()
     {
         playerOptions.SoundEffectVolume = soundEffectVolume;
+        Save();
+        ResetAudioSources();
     }
 
     void ResetAudioSources()
