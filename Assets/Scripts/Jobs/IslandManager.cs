@@ -47,6 +47,10 @@ public class IslandManager : MonoBehaviour
     Island deliveryTarget;
     float deliveryStartTime;
     bool hasJustFailedDelivery;
+
+    [HideInInspector]
+    public bool hasStartedTimer;
+    float timerOffset;
     
     enum ObstacleType { Rock, Whirlpool, Pirates }
 
@@ -56,14 +60,13 @@ public class IslandManager : MonoBehaviour
         {
             player = GameObject.FindWithTag("Player").transform;
             player.position = startingPosition.position;
-            stats = new Stats(true);
             UI = FindObjectOfType<UIManager>();
             input = FindObjectOfType<InputManager>();
             direction = FindObjectOfType<DirectionController>();
-        
+            
+            stats = new Stats(true);
             UI.SetMoney(stats.Money);
-            // TODO: set UI highscore here too
-        
+
             endStateCanvas.SetActive(false);
         }
 
@@ -78,13 +81,13 @@ public class IslandManager : MonoBehaviour
         {
             CreateObstacle(ObstacleType.Rock, j);
         }
-        
-        // TODO: spawn other obstacles
 
         if (isInteracting)
         {
             ChooseTarget();   
         }
+        
+        timerOffset = 1;
     }
 
     void FixedUpdate()
@@ -92,17 +95,26 @@ public class IslandManager : MonoBehaviour
         if (isInteracting && deliveryTarget != null)
         {
             targetArrow.LookAt(deliveryTarget.Object.transform);
-            
-            UI.SetTimer(deliveryTarget.DeliveryTime - (Time.time - deliveryStartTime));
 
-            if (!hasJustFailedDelivery && (Time.time - deliveryStartTime) > deliveryTarget.DeliveryTime)
+            if (hasStartedTimer && !hasJustFailedDelivery)
             {
-                FailDelivery();
+                UI.SetTimer(deliveryTarget.DeliveryTime - (Time.time - deliveryStartTime) * timerOffset);
+                    
+                if ((Time.time - deliveryStartTime) * timerOffset > deliveryTarget.DeliveryTime)
+                {
+                    FailDelivery();
+                }
             }
         }
     }
 
-    Island CreateIsland(Transform trans)
+    public void StartTimer()
+    {
+        deliveryStartTime = Time.time;
+        hasStartedTimer = true;
+    }
+
+    void CreateIsland(Transform trans)
     {
         GameObject temp = Instantiate(
             islandPrefabs[Random.Range(0, islandPrefabs.Length)],
@@ -116,12 +128,10 @@ public class IslandManager : MonoBehaviour
         Island tempIsland = new Island(
             temp,
             Random.Range(1, 15),
-            Random.Range(0, 60) + 60 // TODO: this should be chosen based (somewhat) on current player distance to the island
+            Random.Range(0, 60) + 60
         );
 
         islands.Add(tempIsland);
-        
-        return tempIsland;
     }
 
     void CreateObstacle(ObstacleType type, Transform trans)
@@ -153,15 +163,15 @@ public class IslandManager : MonoBehaviour
     
     void ChooseTarget()
     {
-        deliveryTarget = islands[Random.Range(0, islands.Count)]; // TODO: this should be more likely to choose a closer target than a far one (or follow a preset path)
-        deliveryStartTime = Time.time;
-        
+        deliveryTarget = islands[Random.Range(0, islands.Count)];
+        UI.SetTimer(deliveryTarget.DeliveryTime);
+
         //print("Target position: " + deliveryTarget.Object.transform.position);
     }
 
     public void CompleteDelivery()
     {
-        stats.Money += Mathf.RoundToInt((deliveryTarget.DeliveryTime - (Time.time - deliveryStartTime)) * 100f) / 100f; // TODO: this may want to be tweaked still
+        stats.Money += Mathf.RoundToInt((deliveryTarget.DeliveryTime - (Time.time - deliveryStartTime)) * 100f) / 100f;
         stats.JobCompletionTimes.Add(Time.time - deliveryStartTime);
         stats.JobMaxTimes.Add(deliveryTarget.DeliveryTime);
         stats.WriteToFile();
@@ -184,8 +194,6 @@ public class IslandManager : MonoBehaviour
 
     void FailDelivery()
     {
-        print("fail");
-        
         hasJustFailedDelivery = true;
         
         stats.Strikes++;
@@ -197,41 +205,51 @@ public class IslandManager : MonoBehaviour
         SetEndState(false);
             
         Invoke(nameof(Reset), 3);
-
-        if (stats.Strikes >= 3)
-        {
-            // TODO: what happens after 3 strikes?
-        }
     }
 
     void Reset()
     {
+        input.inputPaused = false;
+        endStateCanvas.SetActive(false);
+        
+        player.position = startingPosition.position;
+        
+        deliveryStartTime = 0;
+        
+        StartCoroutine(direction.FadeArrow(false));
+        
         if (isTesting)
         {
-            hasJustFailedDelivery = false;
-        
-            input.inputPaused = false;
-            endStateCanvas.SetActive(false);
-        
-            player.position = startingPosition.position;
-
             deliveryTarget = null;
-            deliveryStartTime = 0;
-
-            StartCoroutine(direction.FadeArrow(false));
+        
+            hasJustFailedDelivery = false;
         
             ChooseTarget();
         }
         else
         {
-            if (nextScene != "")
+            if (!hasJustFailedDelivery)
             {
-                SceneChanger.StaticChange(nextScene);   
+                if (nextScene != "")
+                {
+                    SceneChanger.StaticChange(nextScene);   
+                }
+                else
+                {
+                    SceneChanger.StaticChange("UltimateWin");
+                }
             }
             else
             {
-                // TODO: all three levels complete
+                if (stats.Strikes >= 3)
+                {
+                    SceneChanger.StaticChange("UltimateLose");
+                }
+                
+                StartTimer();
             }
+        
+            hasJustFailedDelivery = false;
         }
     }
 

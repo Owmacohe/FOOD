@@ -24,7 +24,7 @@ public class Stats
             {
                 Money = float.Parse(lines[0]);
                 HighScore = float.Parse(lines[1]);
-                Strikes = int.Parse(lines[2]);
+                Strikes = /*int.Parse(lines[2])*/0;
                 JobMaxTimes = new List<float>();
                 JobCompletionTimes = new List<float>();
 
@@ -90,7 +90,7 @@ public class Stats
         return
             Money
             + "\n" + HighScore
-            + "\n" + Strikes
+            + "\n" + /*Strikes*/0
             + "\n" + jobMaxTimes
             + "\n" + jobCompletionTimes;
     }

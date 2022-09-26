@@ -26,4 +26,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/Volcano.unity
     guid: 6bfe7cf792f47084c89e78a0c21d0eab
+  - enabled: 1
+    path: Assets/Scenes/UltimateEndings/UltimateWin.unity
+    guid: 14923bde6e3fa914c87ca6ce0184fc82
+  - enabled: 1
+    path: Assets/Scenes/UltimateEndings/UltimateLose.unity
+    guid: 8e17001b8ef274644a236458799734c7
   m_configObjects: {}

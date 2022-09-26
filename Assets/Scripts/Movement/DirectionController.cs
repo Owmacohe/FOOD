@@ -87,6 +87,11 @@ public class DirectionController : MonoBehaviour
             {
                 Invoke(nameof(HideTutorial), 5);
             }
+
+            if (!islands.hasStartedTimer)
+            {
+                islands.StartTimer();
+            }
             
             strengthSound.Play();
             
