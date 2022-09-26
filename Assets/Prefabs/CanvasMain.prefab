@@ -361,7 +361,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press [Space] to move
+  m_text: Press & Hold [Space] to move
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1c0ab8b23b7986c49a61eeb7807b1977, type: 2}
   m_sharedMaterial: {fileID: 8745194526006025970, guid: 1c0ab8b23b7986c49a61eeb7807b1977, type: 2}
