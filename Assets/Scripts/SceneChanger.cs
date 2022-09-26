@@ -23,6 +23,11 @@ public class SceneChanger : MonoBehaviour
         SceneManager.LoadScene(name);
     }
 
+    public void Exit()
+    {
+        Application.Quit(0);
+    }
+
     public static void StaticChange(string name)
     {
         SceneManager.LoadScene(name);
