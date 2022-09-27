@@ -33,8 +33,6 @@ public class IslandManager : MonoBehaviour
     [SerializeField]
     Image endStateImage;
     [SerializeField]
-    TMP_Text endStateText;
-    [SerializeField]
     Sprite winState, loseState;
 
     Transform player;
@@ -255,7 +253,12 @@ public class IslandManager : MonoBehaviour
 
     public bool IsDeliveryTarget(GameObject island)
     {
-        return deliveryTarget.Object.Equals(island);
+        if (deliveryTarget != null)
+        {
+            return deliveryTarget.Object.Equals(island);   
+        }
+
+        return false;
     }
 
     void SetEndState(bool isWin)
@@ -265,12 +268,15 @@ public class IslandManager : MonoBehaviour
         if (isWin)
         {
             endStateImage.sprite = winState;
-            endStateText.text = "Yay! Delivery on time. You're a superstar!";
         }
         else
         {
             endStateImage.sprite = loseState;
-            endStateText.text = "Boo! All the food has spoiled. You ran out of time!";
         }
+    }
+
+    public bool IsHalfTime()
+    {
+        return (Time.time - deliveryStartTime) > (deliveryTarget.DeliveryTime / 2f);
     }
 }

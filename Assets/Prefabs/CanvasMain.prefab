@@ -441,6 +441,7 @@ GameObject:
   - component: {fileID: 1769767543449331652}
   - component: {fileID: 1354983348385340590}
   - component: {fileID: 5093110354419068404}
+  - component: {fileID: 2694806480361551943}
   m_Layer: 5
   m_Name: PopUp
   m_TagString: Untagged
@@ -483,7 +484,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4210096129085563299}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -506,6 +507,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2694806480361551943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4210096129085563299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d98b45d4ca734516b536f119c0db7700, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  positivePopups:
+  - {fileID: 21300000, guid: 13cb3408ae9421b42ab64320f430476d, type: 3}
+  - {fileID: 21300000, guid: cdcb99c857fc2d242b79788e7a0f05b2, type: 3}
+  negativePopups:
+  - {fileID: 21300000, guid: cf7262d9e7edf0244ba66b98e4d83890, type: 3}
+  - {fileID: 21300000, guid: e63c9d229fa994c4aba166bea4804054, type: 3}
+  popupChance: 0.02
 --- !u!1 &4230566901696724699
 GameObject:
   m_ObjectHideFlags: 0
