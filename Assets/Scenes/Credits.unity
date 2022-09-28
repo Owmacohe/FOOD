@@ -181,7 +181,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: UI & UX Designer
+  m_text: UI & UX Designer, Illustrator
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1c0ab8b23b7986c49a61eeb7807b1977, type: 2}
   m_sharedMaterial: {fileID: 8745194526006025970, guid: 1c0ab8b23b7986c49a61eeb7807b1977, type: 2}
@@ -1036,7 +1036,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Programmer
+  m_text: Programmer, Scene Assembly
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1c0ab8b23b7986c49a61eeb7807b1977, type: 2}
   m_sharedMaterial: {fileID: 8745194526006025970, guid: 1c0ab8b23b7986c49a61eeb7807b1977, type: 2}
@@ -1405,8 +1405,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -160.00006, y: -36.4}
-  m_SizeDelta: {x: 400, y: 40}
+  m_AnchoredPosition: {x: -219.9, y: -91.5}
+  m_SizeDelta: {x: 250, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1757902117
 MonoBehaviour:
@@ -1428,7 +1428,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 3D Modeller & Sound Effects
+  m_text: 3D Modeller, Map Designer, Sound Effects
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1c0ab8b23b7986c49a61eeb7807b1977, type: 2}
   m_sharedMaterial: {fileID: 8745194526006025970, guid: 1c0ab8b23b7986c49a61eeb7807b1977, type: 2}
@@ -1463,7 +1463,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
