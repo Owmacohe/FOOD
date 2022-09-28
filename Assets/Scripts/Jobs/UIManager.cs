@@ -52,7 +52,7 @@ public class UIManager : MonoBehaviour
 
     public void SetMoveButtonKey(string k)
     {
-        moveButton.text = "Press [" + k + "] to move";
+        moveButton.text = "Press and hold [" + k + "] to move";
     }
 
     public void SetTimer(float t)

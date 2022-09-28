@@ -36,7 +36,7 @@ public class IslandManager : MonoBehaviour
     Sprite winState, loseState;
 
     Transform player;
-    Stats stats;
+    StatsAndOptionsManager manager;
     UIManager UI;
     InputManager input;
     DirectionController direction;
@@ -45,6 +45,7 @@ public class IslandManager : MonoBehaviour
     Island deliveryTarget;
     float deliveryStartTime;
     bool hasJustFailedDelivery;
+    float resetWaitTime;
 
     [HideInInspector]
     public bool hasStartedTimer;
@@ -61,9 +62,9 @@ public class IslandManager : MonoBehaviour
             UI = FindObjectOfType<UIManager>();
             input = FindObjectOfType<InputManager>();
             direction = FindObjectOfType<DirectionController>();
-            
-            stats = new Stats(true);
-            UI.SetMoney(stats.Money);
+
+            manager = FindObjectOfType<StatsAndOptionsManager>();
+            UI.SetMoney(manager.stats.Money);
 
             endStateCanvas.SetActive(false);
         }
@@ -86,6 +87,7 @@ public class IslandManager : MonoBehaviour
         }
         
         timerOffset = 1;
+        resetWaitTime = 6;
     }
 
     void FixedUpdate()
@@ -169,12 +171,14 @@ public class IslandManager : MonoBehaviour
 
     public void CompleteDelivery()
     {
-        stats.Money += Mathf.RoundToInt((deliveryTarget.DeliveryTime - (Time.time - deliveryStartTime)) * 100f) / 100f;
-        stats.JobCompletionTimes.Add(Time.time - deliveryStartTime);
-        stats.JobMaxTimes.Add(deliveryTarget.DeliveryTime);
-        stats.WriteToFile();
+        Stats temp = manager.stats;
         
-        UI.SetMoney(stats.Money);
+        temp.Money += Mathf.RoundToInt((deliveryTarget.DeliveryTime - (Time.time - deliveryStartTime)) * 100f) / 100f;
+        temp.JobCompletionTimes.Add(Time.time - deliveryStartTime);
+        temp.JobMaxTimes.Add(deliveryTarget.DeliveryTime);
+        //temp.WriteToFile();
+        
+        UI.SetMoney(temp.Money);
         
         deliveryTarget = null;
         deliveryStartTime = 0;
@@ -186,7 +190,7 @@ public class IslandManager : MonoBehaviour
             input.inputPaused = true;
             SetEndState(true);
             
-            Invoke(nameof(Reset), 3);
+            Invoke(nameof(Reset), resetWaitTime);
         }
     }
 
@@ -194,15 +198,15 @@ public class IslandManager : MonoBehaviour
     {
         hasJustFailedDelivery = true;
         
-        stats.Strikes++;
-        stats.WriteToFile();
+        manager.stats.Strikes++;
+        //manager.stats.WriteToFile();
         
-        UI.SetStrikes(stats.Strikes);
+        UI.SetStrikes(manager.stats.Strikes);
         
         input.inputPaused = true;
         SetEndState(false);
             
-        Invoke(nameof(Reset), 3);
+        Invoke(nameof(Reset), resetWaitTime);
     }
 
     void Reset()
@@ -239,7 +243,7 @@ public class IslandManager : MonoBehaviour
             }
             else
             {
-                if (stats.Strikes >= 3)
+                if (manager.stats.Strikes >= 3)
                 {
                     SceneChanger.StaticChange("UltimateLose");
                 }
@@ -277,6 +281,11 @@ public class IslandManager : MonoBehaviour
 
     public bool IsHalfTime()
     {
-        return (Time.time - deliveryStartTime) > (deliveryTarget.DeliveryTime / 2f);
+        if (deliveryTarget != null)
+        {
+            return (Time.time - deliveryStartTime) > (deliveryTarget.DeliveryTime / 2f);   
+        }
+
+        return false;
     }
 }

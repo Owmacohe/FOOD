@@ -8,7 +8,7 @@ public class InputManager : MonoBehaviour
     [SerializeField]
     bool isMenu;
     
-    Options playerOptions;
+    StatsAndOptionsManager manager;
     DirectionController direction;
     MenuInteraction menu;
 
@@ -17,12 +17,12 @@ public class InputManager : MonoBehaviour
 
     void Start()
     {
-        playerOptions = new Options(true);
+        manager = FindObjectOfType<StatsAndOptionsManager>();
 
         if (!isMenu)
         {
             direction = GetComponent<DirectionController>();
-            FindObjectOfType<UIManager>().SetMoveButtonKey(playerOptions.CurrentKey);   
+            FindObjectOfType<UIManager>().SetMoveButtonKey(manager.options.CurrentKey);   
         }
         else
         {
@@ -42,7 +42,7 @@ public class InputManager : MonoBehaviour
 
     void OnShort()
     {
-        if (!inputPaused && currentKeyName.Trim().Equals(playerOptions.CurrentKey.Trim()))
+        if (!inputPaused && currentKeyName.Trim().Equals(manager.options.CurrentKey.Trim()))
         {
             if (!isMenu)
             {
@@ -69,7 +69,7 @@ public class InputManager : MonoBehaviour
 
     void OnLong()
     {
-        if (!inputPaused && currentKeyName.Trim().Equals(playerOptions.CurrentKey.Trim()))
+        if (!inputPaused && currentKeyName.Trim().Equals(manager.options.CurrentKey.Trim()))
         {
             if (isMenu)
             {

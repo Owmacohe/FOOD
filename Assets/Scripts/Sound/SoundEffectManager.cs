@@ -17,12 +17,14 @@ public class SoundEffectManager : MonoBehaviour
     
     AudioSource source;
     AudioClip lastPlayed;
-    Options playerOptions;
+    StatsAndOptionsManager manager;
     
     void Start()
     {
         source = gameObject.AddComponent<AudioSource>();
         source.playOnAwake = false;
+
+        manager = FindObjectOfType<StatsAndOptionsManager>();
     }
 
     void FixedUpdate()
@@ -52,7 +54,7 @@ public class SoundEffectManager : MonoBehaviour
             source.pitch = 1 + Random.Range(-0.5f, 0.5f);
         }
         
-        ResetAudio();
+        Invoke(nameof(ResetAudio), 0.1f);
         
         source.Play();
         
@@ -61,7 +63,6 @@ public class SoundEffectManager : MonoBehaviour
     
     public void ResetAudio()
     {
-        playerOptions = new Options(true);
-        source.volume = volume * (playerOptions.MasterVolume * 2f);
+        source.volume = volume * (manager.options.MasterVolume * 2f);
     }
 }

@@ -37,13 +37,15 @@ public class Options
         MusicVolume = 0.5f;
         SoundEffectVolume = 0.5f;
         
-        WriteToFile();
+        //WriteToFile();
     }
 
+    /*
     public void WriteToFile()
     {
         File.WriteAllText(Application.dataPath + "/Resources/player_options.txt", ToString());
     }
+    */
 
     public string ToString()
     {

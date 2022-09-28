@@ -19,14 +19,14 @@ public class OptionsMenu : MonoBehaviour
     [SerializeField]
     Slider soundEffectVolumeSlider;
 
-    Options playerOptions;
+    StatsAndOptionsManager manager;
 
     bool isListening;
     float masterVolume, musicVolume, soundEffectVolume;
 
     void Start()
     {
-        playerOptions = new Options(true);
+        manager = FindObjectOfType<StatsAndOptionsManager>();
         ResetUI(true);
     }
 
@@ -42,21 +42,23 @@ public class OptionsMenu : MonoBehaviour
 
     void ResetUI(bool isFromStart = false)
     {
-        interactionKey.text = "Interaction Key: " + playerOptions.CurrentKey;
+        Options temp = manager.options;
+        
+        interactionKey.text = "Interaction Key: " + temp.CurrentKey;
         interactionKeyButton.text = "> listen for new key <";
-        isMutedButton.text = "Is muted: " + playerOptions.IsMuted;
+        isMutedButton.text = "Is muted: " + temp.IsMuted;
 
         if (isFromStart)
         {
-            masterVolumeSlider.value = playerOptions.MasterVolume; 
-            musicVolumeSlider.value = playerOptions.MusicVolume;
-            soundEffectVolumeSlider.value = playerOptions.SoundEffectVolume; 
+            masterVolumeSlider.value = temp.MasterVolume; 
+            musicVolumeSlider.value = temp.MusicVolume;
+            soundEffectVolumeSlider.value = temp.SoundEffectVolume; 
         }
     }
 
     public void Save()
     {
-        playerOptions.WriteToFile();
+        //manager.options.WriteToFile();
     }
     
     public void ListenForNewKey()
@@ -67,27 +69,30 @@ public class OptionsMenu : MonoBehaviour
 
     public void ToggleIsMuted()
     {
-        playerOptions.IsMuted = !playerOptions.IsMuted;
+        manager.options.IsMuted = !manager.options.IsMuted;
         ResetUI();
     }
 
     public void SetMasterVolume()
     {
-        playerOptions.MasterVolume = masterVolume;
-        Save();
-        ResetAudioSources();
+        if (masterVolume > 0)
+        {
+            manager.options.MasterVolume = masterVolume;
+            Save();
+            ResetAudioSources(); 
+        }
     }
     
     public void SetMusicVolume()
     {
-        playerOptions.MusicVolume = musicVolume;
+        manager.options.MusicVolume = musicVolume;
         Save();
         ResetAudioSources();
     }
     
     public void SetSoundEffectVolume()
     {
-        playerOptions.SoundEffectVolume = soundEffectVolume;
+        manager.options.SoundEffectVolume = soundEffectVolume;
         Save();
         ResetAudioSources();
     }
@@ -113,7 +118,7 @@ public class OptionsMenu : MonoBehaviour
         
             if (e.isKey && e.keyCode != KeyCode.None)
             {
-                playerOptions.CurrentKey = e.keyCode.ToString();
+                manager.options.CurrentKey = e.keyCode.ToString();
                 ResetUI();
             }
         }
