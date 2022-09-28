@@ -19,10 +19,10 @@ public class MenuInteraction : MonoBehaviour
 
         if (instructionText1 != null && instructionText2 != null)
         {
-            Options playerOptions = new Options(true);
+            StatsAndOptionsManager manager = FindObjectOfType<StatsAndOptionsManager>();
             
-            instructionText1.text = "Press " + playerOptions.CurrentKey + " to switch selection >";
-            instructionText2.text = "Hold " + playerOptions.CurrentKey + " to confirm selection";
+            instructionText1.text = "Press " + manager.options.CurrentKey + " to switch selection >";
+            instructionText2.text = "Hold " + manager.options.CurrentKey + " to confirm selection";
         }
 
         foreach (GameObject i in menuItems)
