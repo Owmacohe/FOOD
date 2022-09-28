@@ -87,7 +87,7 @@ public class IslandManager : MonoBehaviour
         }
         
         timerOffset = 1;
-        resetWaitTime = 6;
+        resetWaitTime = 8;
     }
 
     void FixedUpdate()
