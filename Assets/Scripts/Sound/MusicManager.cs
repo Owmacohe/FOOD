@@ -8,7 +8,7 @@ public class MusicManager : MonoBehaviour
     public float volume = 0.5f;
     
     AudioSource source;
-    Options playerOptions;
+    StatsAndOptionsManager manager;
     
     void Start()
     {
@@ -17,15 +17,16 @@ public class MusicManager : MonoBehaviour
         source.loop = true;
         source.clip = clip;
         source.volume = volume;
+
+        manager = FindObjectOfType<StatsAndOptionsManager>();
         
-        ResetAudio();
+        Invoke(nameof(ResetAudio), 0.1f);
         
         source.Play();
     }
 
     public void ResetAudio()
     {
-        playerOptions = new Options(true);
-        source.volume = volume * (playerOptions.MasterVolume * 2f);
+        source.volume = volume * (manager.options.MasterVolume * 2f);
     }
 }

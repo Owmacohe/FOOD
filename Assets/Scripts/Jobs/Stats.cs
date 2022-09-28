@@ -54,13 +54,15 @@ public class Stats
         JobMaxTimes = new List<float>();
         JobCompletionTimes = new List<float>();
         
-        WriteToFile();
+        //WriteToFile();
     }
     
+    /*
     public void WriteToFile()
     {
         File.WriteAllText(Application.dataPath + "/Resources/player_stats.txt", ToString());
     }
+    */
     
     public string ToString()
     {
